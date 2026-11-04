@@ -15,3 +15,5 @@
 /UnityProject/[Uu]ser[Ss]ettings/
 /UnityProject/*.csproj
 /UnityProject/*.sln
+/tools/verify/obj/
+/tools/verify/bin/
