@@ -354,3 +354,43 @@ namespace BreakToEscape.Tests
         }
     }
 }
+
+namespace BreakToEscape.Tests
+{
+    public class ProceduralMineTests
+    {
+        private static VoxelGrid Generate(int seed, out MineLayout layout)
+        {
+            VoxelGrid grid = TestData.NewGrid();
+            layout = ProceduralMineGenerator.Generate(grid, seed, TestData.Economy.treasureOneInVoxels, TestData.Economy.nookTreasureClusterSize);
+            return grid;
+        }
+
+        [Test]
+        public void SameSeedSameMine_DifferentSeedDifferentMine()
+        {
+            VoxelGrid a = Generate(777, out MineLayout la);
+            VoxelGrid b = Generate(777, out MineLayout lb);
+            VoxelGrid c = Generate(778, out _);
+            Assert.AreEqual(a.RawIds, b.RawIds);
+            Assert.AreEqual(la.interactables.Count, lb.interactables.Count);
+            for (int i = 0; i < la.interactables.Count; i++)
+                Assert.AreEqual(la.interactables[i].position.ToString(), lb.interactables[i].position.ToString());
+            Assert.AreNotEqual(a.RawIds, c.RawIds);
+        }
+
+        [Test]
+        public void ManySeedsSatisfyTheLayoutContractAndEveryRoomIsReachable(
+            [Values(1, 2, 3, 42, 999, 12345, 2026, 31337)] int seed)
+        {
+            VoxelGrid grid = Generate(seed, out MineLayout layout);
+            List<string> problems = MineLayoutValidator.Validate(grid, layout);
+            Assert.IsEmpty(problems, "seed " + seed + ":\n" + string.Join("\n", problems));
+            HashSet<string> reachable = ProceduralMineGenerator.ReachableRooms(grid, layout);
+            foreach (RoomDefinition room in layout.rooms)
+                if (!room.isHiddenNook) Assert.IsTrue(reachable.Contains(room.id), "seed " + seed + ": room " + room.id + " not reachable");
+            Assert.IsTrue(layout.isProcedural);
+            Assert.AreEqual(5, layout.collapsedPlugs.Count, "every tunnel is blocked by a cave-in the player must dig");
+        }
+    }
+}

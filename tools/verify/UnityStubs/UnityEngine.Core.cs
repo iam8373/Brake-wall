@@ -118,6 +118,10 @@ namespace UnityEngine
         public Vector3 InverseTransformPoint(Vector3 position) => default;
         public Vector3 TransformDirection(Vector3 direction) => default;
         public void SetAsLastSibling() { }
+        public void SetAsFirstSibling() { }
+        public int GetSiblingIndex() => 0;
+        public void SetSiblingIndex(int index) { }
+        public Transform Find(string n) => null;
         public IEnumerator GetEnumerator() => null;
     }
 
@@ -144,6 +148,10 @@ namespace UnityEngine
         public float xMax { get; set; }
         public float yMax { get; set; }
         public bool Contains(Vector2 point) => false;
+        public static bool operator ==(Rect a, Rect b) => true;
+        public static bool operator !=(Rect a, Rect b) => false;
+        public override bool Equals(object o) => false;
+        public override int GetHashCode() => 0;
     }
 
     // ---------------------------------------------------------------- math
@@ -317,6 +325,7 @@ namespace UnityEngine
         public const float Deg2Rad = 0.0174532924f;
         public const float Rad2Deg = 57.29578f;
         public static float Sin(float f) => 0f;
+        public static float Atan2(float y, float x) => 0f;
         public static float Cos(float f) => 0f;
         public static float Abs(float f) => 0f;
         public static int Abs(int v) => 0;

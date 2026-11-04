@@ -82,6 +82,8 @@ namespace BreakToEscape.Core.World
         public readonly List<RoomDefinition> rooms = new List<RoomDefinition>();
         public readonly List<InteractableSpot> interactables = new List<InteractableSpot>();
         public readonly List<TreasureSpot> treasures = new List<TreasureSpot>();
+        /// <summary>Procedural mines only: cave-in plugs of rock that block the old tunnels (dig through them).</summary>
+        public readonly List<VoxelBox> collapsedPlugs = new List<VoxelBox>();
 
         public RoomDefinition Room(string id)
         {

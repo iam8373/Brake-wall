@@ -26,6 +26,7 @@ namespace UnityEngine
         public void SetTriangles(List<int> triangles, int submesh) { }
         public void SetTriangles(List<int> triangles, int submesh, bool calculateBounds) { }
         public void SetIndices(int[] indices, MeshTopology topology, int submesh) { }
+        public void SetIndices(List<int> indices, MeshTopology topology, int submesh, bool calculateBounds = true, int baseVertex = 0) { }
         public void RecalculateNormals() { }
         public void RecalculateBounds() { }
         public void UploadMeshData(bool markNoLongerReadable) { }
@@ -402,5 +403,25 @@ namespace UnityEngine.SceneManagement
         public static Scene GetActiveScene() => default;
         public static void LoadScene(int sceneBuildIndex) { }
         public static void LoadScene(string sceneName) { }
+    }
+}
+
+namespace UnityEngine
+{
+    // Android bridge (compiled only in the UNITY_ANDROID player harness).
+    public class AndroidJavaObject : IDisposable
+    {
+        public AndroidJavaObject(string className, params object[] args) { }
+        public void Call(string methodName, params object[] args) { }
+        public T Call<T>(string methodName, params object[] args) => default;
+        public T Get<T>(string fieldName) => default;
+        public void Dispose() { }
+    }
+
+    public class AndroidJavaClass : AndroidJavaObject
+    {
+        public AndroidJavaClass(string className) : base(className) { }
+        public T GetStatic<T>(string fieldName) => default;
+        public T CallStatic<T>(string methodName, params object[] args) => default;
     }
 }

@@ -101,6 +101,9 @@ namespace BreakToEscape.Core.Rubble
             return slot;
         }
 
+        /// <summary>True if a cube could be spawned now (a free slot under the cap, or a settled cube to sweep).</summary>
+        public bool CanSpawn => free.Count > 0 && LiveCount < Cap || FindOldestSweepable() >= 0;
+
         /// <summary>Sweeps settled cubes until the live count is within the cap (used when the cap drops).</summary>
         public long SweepExcess(List<int> sweptSlots)
         {
