@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Player build view with the new Input System enabled (ENABLE_INPUT_SYSTEM). -->
+  <Import Project="Harness.props" />
+  <PropertyGroup><DefineConstants>UNITY_ANDROID;ENABLE_INPUT_SYSTEM</DefineConstants></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="UnityStubs/*.cs" />
+    <Compile Include="../../UnityProject/Assets/Scripts/**/*.cs" Exclude="../../UnityProject/Assets/Scripts/Editor/**/*.cs" />
+  </ItemGroup>
+</Project>
