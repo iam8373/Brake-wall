@@ -10,8 +10,11 @@ namespace UnityEngine.EventSystems
 
     public class BaseEventData { }
 
+    public struct RaycastResult { public GameObject gameObject { get; set; } }
+
     public class PointerEventData : BaseEventData
     {
+        public PointerEventData(EventSystem eventSystem) { }
         public Vector2 position { get; set; }
         public Vector2 delta { get; set; }
         public int pointerId { get; set; }
@@ -33,6 +36,7 @@ namespace UnityEngine.EventSystems
         public static EventSystem current { get; set; }
         public bool IsPointerOverGameObject() => false;
         public bool IsPointerOverGameObject(int pointerId) => false;
+        public void RaycastAll(PointerEventData eventData, System.Collections.Generic.List<RaycastResult> raycastResults) { }
     }
 
     public abstract class BaseInputModule : UIBehaviour { }

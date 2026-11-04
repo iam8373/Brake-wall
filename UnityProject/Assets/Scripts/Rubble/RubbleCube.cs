@@ -21,20 +21,24 @@ public class RubbleCube : MonoBehaviour
     public Rigidbody Body { get; private set; }
 
     private MeshRenderer meshRenderer;
-    private MaterialPropertyBlock block;
+    private Material baseMaterial;
     private RubbleSuctionManager owner;
     private float settleTimer;
     private bool reportedSettled;
     private bool kinematicHeld;
 
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
-    private static readonly int ColorId = Shader.PropertyToID("_Color");
+    /// <summary>
+    /// One material per voxel material id, created from the prefab's material. Using shared
+    /// materials (instead of per-cube property blocks) keeps rubble compatible with the SRP Batcher.
+    /// </summary>
+    private static readonly Material[] SharedByMaterial = new Material[16];
 
     void Awake()
     {
         Body = GetComponent<Rigidbody>();
         meshRenderer = GetComponent<MeshRenderer>();
-        block = new MaterialPropertyBlock();
+        baseMaterial = meshRenderer.sharedMaterial;
     }
 
     public void Bind(RubbleSuctionManager manager, int slot)
@@ -52,10 +56,7 @@ public class RubbleCube : MonoBehaviour
         reportedSettled = false;
         kinematicHeld = false;
 
-        meshRenderer.GetPropertyBlock(block);
-        block.SetColor(BaseColorId, color);
-        block.SetColor(ColorId, color);
-        meshRenderer.SetPropertyBlock(block);
+        meshRenderer.sharedMaterial = MaterialFor(material, color);
 
         transform.SetPositionAndRotation(position, Random.rotation);
         transform.localScale = Vector3.one * scale;
@@ -64,6 +65,18 @@ public class RubbleCube : MonoBehaviour
         Body.WakeUp();
         Body.linearVelocity = velocity;
         Body.angularVelocity = Random.insideUnitSphere * 10f;
+    }
+
+    private Material MaterialFor(byte material, Color color)
+    {
+        int i = material < SharedByMaterial.Length ? material : 0;
+        if (!SharedByMaterial[i] && baseMaterial)
+        {
+            SharedByMaterial[i] = new Material(baseMaterial) { name = "Rubble_" + i };
+            if (SharedByMaterial[i].HasProperty(BaseColorId)) SharedByMaterial[i].SetColor(BaseColorId, color);
+            SharedByMaterial[i].color = color;
+        }
+        return SharedByMaterial[i] ? SharedByMaterial[i] : baseMaterial;
     }
 
     /// <summary>Freezes physics while the cube is scripted (vacuum curve, crusher).</summary>

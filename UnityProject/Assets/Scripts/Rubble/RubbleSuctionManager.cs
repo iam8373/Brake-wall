@@ -129,7 +129,8 @@ public class RubbleSuctionManager : MonoBehaviour
     private void PayRefund(long amount)
     {
         if (amount <= 0) return;
-        economy.Earn(amount);
+        if (CompanyStoreEconomyManager.Instance) CompanyStoreEconomyManager.Instance.Earn(amount);
+        else economy.Earn(amount);
         SweepRefundPaid?.Invoke(amount);
     }
 

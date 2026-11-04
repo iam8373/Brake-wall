@@ -2,7 +2,6 @@ using System;
 using BreakToEscape.Core.Economy;
 using BreakToEscape.Core.Limits;
 using BreakToEscape.Core.Services;
-using BreakToEscape.Core.Story;
 using UnityEngine;
 
 /// <summary>

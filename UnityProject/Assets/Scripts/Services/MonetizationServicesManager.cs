@@ -79,14 +79,14 @@ public class MonetizationServicesManager : MonoBehaviour
     /// <summary>True if the offer may be shown now (cooldown, cap and grace period respected, and something can deliver it).</summary>
     public bool CanOffer(string placement)
     {
-        if (Rules == null) return false;
+        if (Rules == null || ads == null) return false;
         return Rules.DecideReward(placement, PlaySeconds, ads.IsRewardedReady, AllowTestFallback) != RewardDecision.Unavailable;
     }
 
     /// <summary>Runs the reward flow for a placement after the player chose WATCH AD.</summary>
     public void RequestReward(string placement)
     {
-        if (Rules == null) return;
+        if (Rules == null || ads == null) return;
         RewardDecision decision = Rules.DecideReward(placement, PlaySeconds, ads.IsRewardedReady, AllowTestFallback);
         switch (decision)
         {
@@ -125,7 +125,7 @@ public class MonetizationServicesManager : MonoBehaviour
 
     public void PurchaseRemoveAds()
     {
-        if (Rules == null) return;
+        if (Rules == null || purchases == null) return;
         switch (Rules.DecideRemoveAdsPurchase(purchases.IsReady, AllowTestFallback))
         {
             case PurchaseDecision.StartPurchase:

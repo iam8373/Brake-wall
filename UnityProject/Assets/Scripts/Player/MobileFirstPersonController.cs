@@ -107,7 +107,7 @@ public class MobileFirstPersonController : MonoBehaviour
         for (int i = 0; i < pointers.Count; i++)
         {
             PointerSample p = pointers[i];
-            if (p.phase == PointerPhase.Began && activeLookPointer == -1 && InLookZone(p.position) && !PlayerInputSource.IsPointerOverUI(p.id))
+            if (p.phase == PointerPhase.Began && activeLookPointer == -1 && InLookZone(p.position) && !PlayerInputSource.IsPointerOverUI(p.position))
                 activeLookPointer = p.id;
 
             if (p.id != activeLookPointer) continue;

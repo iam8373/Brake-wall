@@ -156,12 +156,28 @@ public static class PlayerInputSource
 #endif
     }
 
-    /// <summary>True if a pointer is over a UI element (so a drag on a button never turns the camera).</summary>
-    public static bool IsPointerOverUI(int pointerId)
+    private static readonly List<RaycastResult> UiHits = new List<RaycastResult>(8);
+    private static PointerEventData uiPointer;
+    private static EventSystem uiPointerSystem;
+
+    /// <summary>
+    /// True if a screen position is over a UI element (so a drag that starts on a button never turns
+    /// the camera). Uses a UI raycast, which behaves the same with either UI input module and with
+    /// several fingers down, unlike IsPointerOverGameObject(pointerId).
+    /// </summary>
+    public static bool IsPointerOverUI(Vector2 screenPosition)
     {
         EventSystem es = EventSystem.current;
         if (es == null) return false;
-        return pointerId == 100 ? es.IsPointerOverGameObject() : es.IsPointerOverGameObject(pointerId);
+        if (uiPointer == null || uiPointerSystem != es)
+        {
+            uiPointer = new PointerEventData(es);
+            uiPointerSystem = es;
+        }
+        uiPointer.position = screenPosition;
+        UiHits.Clear();
+        es.RaycastAll(uiPointer, UiHits);
+        return UiHits.Count > 0;
     }
 
 #if ENABLE_INPUT_SYSTEM && !BTE_FORCE_LEGACY_INPUT

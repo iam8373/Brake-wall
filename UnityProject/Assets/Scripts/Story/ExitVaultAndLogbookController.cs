@@ -34,7 +34,6 @@ public class ExitVaultAndLogbookController : MonoBehaviour
     private EscapeStateMachine escape;
     private StoryData story;
     private UIScreenAndAccessibilityManager ui;
-    private Transform gateRoot;
     private Transform gateDoor;
     private bool animating;
 
@@ -52,7 +51,6 @@ public class ExitVaultAndLogbookController : MonoBehaviour
     /// <summary>Called when the gate placeholder is spawned from the layout.</summary>
     public void AttachGate(Transform gate)
     {
-        gateRoot = gate;
         gateDoor = gate.Find("GateDoor");
         if (escapeLight)
         {

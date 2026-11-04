@@ -57,7 +57,6 @@ public static class SceneAutoBuilderEditor
         EconomyData data = EconomyData.FromJson(economyAsset.text);
 
         EnsureLayers();
-        Physics.IgnoreLayerCollision(LayerRubble, LayerRubble, false);
         EnsureFolder("Assets", "Generated");
         EnsureFolder(GeneratedRoot, "Materials");
         EnsureFolder(GeneratedRoot, "Prefabs");
