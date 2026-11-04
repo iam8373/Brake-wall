@@ -56,7 +56,9 @@ public static class PlayerInputSource
     }
 
     private static bool initialized;
+#if !(ENABLE_INPUT_SYSTEM && !BTE_FORCE_LEGACY_INPUT)
     private static Vector2 lastMousePosition;
+#endif
 
     public static void EnsureInitialized()
     {

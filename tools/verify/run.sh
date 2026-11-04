@@ -12,10 +12,11 @@ run() {
   local name="$1" proj="$2"
   local log="../../.verify-build/$name.log"
   mkdir -p ../../.verify-build
-  dotnet build "$proj" -nologo -clp:NoSummary -v:q > "$log" 2>&1
-  local errors
+  dotnet build "$proj" -nologo --no-incremental -clp:NoSummary -v:n > "$log" 2>&1
+  local errors warnings
   errors=$(grep -E ': error ' "$log" | sort -u | wc -l)
-  echo "$name: $errors error(s)  (log: .verify-build/$name.log)"
+  warnings=$(grep -E ': warning CS' "$log" | grep -v '/UnityStubs/' | sort -u | wc -l)
+  echo "$name: $errors error(s), $warnings warning(s) in game code  (log: .verify-build/$name.log)"
   [ "$errors" -eq 0 ] || status=1
 }
 case "$target" in

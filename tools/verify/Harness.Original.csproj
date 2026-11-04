@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!-- Baseline: the untouched first-draft scripts in codebase/, editor code included. -->
-  <Import Project="Harness.props" />
   <PropertyGroup><DefineConstants>UNITY_EDITOR</DefineConstants></PropertyGroup>
   <ItemGroup>
     <Compile Include="UnityStubs/*.cs" />

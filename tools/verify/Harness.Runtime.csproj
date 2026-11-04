@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!-- Player build view: all runtime scripts, no editor code, legacy input path. -->
-  <Import Project="Harness.props" />
   <PropertyGroup><DefineConstants>UNITY_ANDROID</DefineConstants></PropertyGroup>
   <ItemGroup>
     <Compile Include="UnityStubs/*.cs" />

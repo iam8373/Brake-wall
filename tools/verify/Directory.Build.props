@@ -7,7 +7,7 @@
     <Nullable>disable</Nullable>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <ImplicitUsings>disable</ImplicitUsings>
-    <NoWarn>CS0414;CS0649;CS0169;CS0067;CS1591</NoWarn>
+    <NoWarn>CS1591</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <BaseOutputPath>$(MSBuildThisFileDirectory)../../.verify-build/bin/$(MSBuildProjectName)/</BaseOutputPath>
