@@ -98,8 +98,9 @@ public class Crusher07Controller : MonoBehaviour
 
         float rpm = grinding ? activeRollerRPM : idleRollerRPM;
         float degrees = rpm * 6f * Time.deltaTime;
-        if (leftRoller) leftRoller.Rotate(Vector3.right * degrees, Space.Self);
-        if (rightRoller) rightRoller.Rotate(Vector3.left * degrees, Space.Self);
+        // Rollers are cylinders whose axis is their local up; they turn towards each other.
+        if (leftRoller) leftRoller.Rotate(Vector3.up * degrees, Space.Self);
+        if (rightRoller) rightRoller.Rotate(Vector3.down * degrees, Space.Self);
         if (crusherFrame)
         {
             if (grinding)

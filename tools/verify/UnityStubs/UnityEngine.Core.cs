@@ -80,6 +80,7 @@ namespace UnityEngine
         public T AddComponent<T>() where T : Component => default;
         public Component AddComponent(Type componentType) => null;
         public T GetComponent<T>() => default;
+        public T[] GetComponents<T>() => null;
         public T GetComponentInChildren<T>() => default;
         public T GetComponentInChildren<T>(bool includeInactive) => default;
         public bool TryGetComponent<T>(out T component) { component = default; return false; }

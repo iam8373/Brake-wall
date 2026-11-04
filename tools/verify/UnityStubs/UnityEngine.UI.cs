@@ -155,5 +155,6 @@ namespace TMPro
     }
 
     public class TextMeshProUGUI : TMP_Text { }
+    public class TMP_Settings : UnityEngine.ScriptableObject { public static TMP_Settings instance => null; }
     public class TextMeshPro : TMP_Text { }
 }
