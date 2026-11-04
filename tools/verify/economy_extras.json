@@ -1,0 +1,72 @@
+{
+  "_comment": "Hand-authored values that are NOT in the economy spreadsheet. They are merged into Assets/Resources/Data/economy.json by generate_economy_json.py. Every value here is a starting guess for tuning; see docs/DECISIONS.md.",
+  "voxelSize": 0.5,
+  "worldSizeVoxels": [96, 32, 96],
+  "startingCash": 0,
+  "secondsPerDay": 90,
+  "sweepRefundRatio": 0.6,
+  "bandColors": ["#ADB3B8", "#7A5230", "#D19952", "#6B6670", "#B86B35", "#4FD6E8"],
+  "treasureMaterials": [
+    { "id": 7, "key": "copperSeam", "name": "Copper seam", "hp": 45, "value": 45, "colorHex": "#D97A38", "glows": false, "bands": [1, 2] },
+    { "id": 8, "key": "goldSeam", "name": "Gold seam", "hp": 110, "value": 180, "colorHex": "#FFD626", "glows": false, "bands": [3, 4] },
+    { "id": 9, "key": "geodeCrystal", "name": "Geode crystal", "hp": 220, "value": 450, "colorHex": "#8CF2FF", "glows": true, "bands": [5, 6] }
+  ],
+  "treasureDensity": {
+    "_comment": "Chance that a solid voxel outside the starting shell becomes a treasure voxel (1 in N). Nook treasure clusters are counted separately by the pacing check.",
+    "oneInVoxels": 600,
+    "nookClusterSize": 6
+  },
+  "charge": {
+    "tapThresholdSeconds": 0.18,
+    "fullChargeSeconds": 1.15,
+    "maxPatternBonusLevels": 2,
+    "maxDamageMultiplier": 2.0
+  },
+  "punch": {
+    "reachMeters": 2.4,
+    "inputBufferSeconds": 0.12
+  },
+  "dynamite": {
+    "startingStock": 3,
+    "fuseSeconds": 3.0,
+    "blastRadiusMeters": 1.75,
+    "blastDamage": 500
+  },
+  "storeItems": {
+    "dynamitePack": { "cost": 400, "sticks": 3 },
+    "autoPunch": { "cost": 1200 },
+    "treasureDetector": { "cost": 650, "rangeMeters": 6.5 },
+    "headlampLevels": [
+      { "level": 1, "cost": 0, "rangeMeters": 12, "intensity": 1.6, "spotAngle": 55 },
+      { "level": 2, "cost": 500, "rangeMeters": 18, "intensity": 2.2, "spotAngle": 62 },
+      { "level": 3, "cost": 1800, "rangeMeters": 26, "intensity": 2.8, "spotAngle": 70 }
+    ]
+  },
+  "equipment": {
+    "workGauntlets": { "name": "Work Gauntlets", "repairCost": 0, "partId": "", "source": "Old Gallery locker", "punchDamageMultiplier": 1.15 },
+    "pneumaticHammer": { "name": "Pneumatic Hammer", "repairCost": 2500, "partId": "hammerPiston", "source": "Equipment Bay", "punchSpeedMultiplier": 1.25 },
+    "conveyor": { "name": "Conveyor", "repairCost": 3000, "partId": "conveyorMotor", "source": "Equipment Bay" },
+    "rockDrill": { "name": "Rock Drill", "repairCost": 20000, "partId": "drillBit", "source": "Pump Room", "depthLayers": 3 }
+  },
+  "vacuumVisualTiers": {
+    "_comment": "Tank Capacity level at which each vacuum look appears: Dust-buster, Ore Hoover, Suction Cannon.",
+    "fromTankLevel": [1, 4, 7]
+  },
+  "monetization": {
+    "doubleCashDurationSeconds": 300,
+    "doubleCashCooldownSeconds": 600,
+    "freeDynamiteSticks": 2,
+    "freeDynamitePerSession": 3,
+    "adFreeGracePeriodSeconds": 300,
+    "removeAdsProductId": "remove_ads",
+    "removeAdsDoubleCashCooldownSeconds": 1200,
+    "removeAdsFreeDynamitePerSession": 2
+  },
+  "tiers": {
+    "low": { "rubbleCap": 100, "targetFps": 30, "physicsHz": 30, "renderScale": 0.7, "shadowDistance": 0, "farClip": 22, "mainLightShadows": false },
+    "mid": { "rubbleCap": 200, "targetFps": 60, "physicsHz": 50, "renderScale": 0.9, "shadowDistance": 12, "farClip": 32, "mainLightShadows": true },
+    "high": { "rubbleCap": 400, "targetFps": 60, "physicsHz": 60, "renderScale": 1.0, "shadowDistance": 25, "farClip": 45, "mainLightShadows": true },
+    "thermalGuard": { "checkIntervalSeconds": 5, "minAverageFpsAt60": 48, "minAverageFpsAt30": 26, "rubbleCapStepDown": 0.75, "minimumRubbleCap": 80 },
+    "detection": { "lowMaxRamMb": 4200, "lowMaxCores": 4, "lowMaxGraphicsMb": 1024, "highMinRamMb": 7200, "highMinCores": 8 }
+  }
+}
