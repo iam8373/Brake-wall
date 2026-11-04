@@ -1,0 +1,32 @@
+{
+  "_comment": "Maps game sound events to clip file names in Assets/Resources/Audio (without extension). Every list may be empty; missing clips are skipped. See docs/ASSET_REQUIREMENTS.md for what each clip should be.",
+  "events": {
+    "punch_concrete": ["punch_concrete_01", "punch_concrete_02", "punch_concrete_03"],
+    "punch_earth": ["punch_earth_01", "punch_earth_02", "punch_earth_03"],
+    "punch_sandstone": ["punch_sandstone_01", "punch_sandstone_02", "punch_sandstone_03"],
+    "punch_granite": ["punch_granite_01", "punch_granite_02", "punch_granite_03"],
+    "punch_ore": ["punch_ore_01", "punch_ore_02", "punch_ore_03"],
+    "punch_crystal": ["punch_crystal_01", "punch_crystal_02", "punch_crystal_03"],
+    "punch_treasure": ["punch_treasure_01", "punch_treasure_02"],
+    "punch_charged": ["punch_charged_01"],
+    "vacuum_loop": ["vacuum_loop"],
+    "crusher_loop": ["crusher_loop"],
+    "coin": ["coin_01", "coin_02"],
+    "dynamite_blast": ["dynamite_blast_01", "dynamite_blast_02"],
+    "radar_ping": ["radar_ping"],
+    "ui_click": ["ui_click"],
+    "ambience": ["cave_ambience_loop"],
+    "music": ["music_calm_loop"]
+  },
+  "punchByMaterial": {
+    "1": "punch_concrete",
+    "2": "punch_earth",
+    "3": "punch_sandstone",
+    "4": "punch_granite",
+    "5": "punch_ore",
+    "6": "punch_crystal",
+    "7": "punch_treasure",
+    "8": "punch_treasure",
+    "9": "punch_treasure"
+  }
+}

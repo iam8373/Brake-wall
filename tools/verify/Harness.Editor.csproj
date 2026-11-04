@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Editor view: runtime scripts plus the editor builder (UNITY_EDITOR and DEVELOPMENT_BUILD paths). -->
+  <PropertyGroup><DefineConstants>UNITY_EDITOR;ENABLE_INPUT_SYSTEM</DefineConstants></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="UnityStubs/*.cs" />
+    <Compile Include="../../UnityProject/Assets/Scripts/**/*.cs" />
+  </ItemGroup>
+</Project>

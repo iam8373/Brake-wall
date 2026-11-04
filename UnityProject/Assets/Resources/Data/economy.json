@@ -1,0 +1,597 @@
+{
+  "_generatedBy": "tools/verify/generate_economy_json.py from docs/economy/Break_to_Escape_Economy.xlsx and tools/verify/economy_extras.json. Do not edit by hand; edit the sources and re-run the script.",
+  "version": 1,
+  "upgrades": {
+    "punchPower": {
+      "displayName": "Punch Power",
+      "description": "Damage per punch to every cube in the pattern",
+      "unit": "damage",
+      "baseCost": 150,
+      "costGrowth": 2.2,
+      "effects": [
+        10,
+        14.5,
+        21.025,
+        30.48625,
+        44.2050625,
+        64.097340625,
+        92.941143906,
+        134.764658664,
+        195.408755063,
+        283.342694841
+      ],
+      "cumulativeCost": [
+        0,
+        150,
+        480,
+        1206,
+        2803.2,
+        6317.04,
+        14047.488,
+        31054.4736,
+        68469.84192,
+        150783.652224
+      ]
+    },
+    "punchSpeed": {
+      "displayName": "Punch Speed",
+      "description": "Punches per second (adds per level)",
+      "unit": "punches/s",
+      "baseCost": 200,
+      "costGrowth": 2.2,
+      "effects": [
+        1.5,
+        1.75,
+        2,
+        2.25,
+        2.5,
+        2.75,
+        3,
+        3.25,
+        3.5,
+        3.75
+      ],
+      "cumulativeCost": [
+        0,
+        200,
+        640,
+        1608,
+        3737.6,
+        8422.72,
+        18729.984,
+        41405.9648,
+        91293.12256,
+        201044.869632
+      ]
+    },
+    "punchPattern": {
+      "displayName": "Punch Pattern",
+      "description": "Cubes hit by one punch (list below)",
+      "unit": "cubes",
+      "baseCost": 250,
+      "costGrowth": 2.2,
+      "effects": [
+        5,
+        9,
+        13,
+        21,
+        29,
+        37,
+        49,
+        61,
+        77,
+        97
+      ],
+      "cumulativeCost": [
+        0,
+        250,
+        800,
+        2010,
+        4672,
+        10528.4,
+        23412.48,
+        51757.456,
+        114116.4032,
+        251306.08704
+      ]
+    },
+    "vacuumSuction": {
+      "displayName": "Vacuum Suction",
+      "description": "Cubes per second the vacuum pulls in",
+      "unit": "cubes/s",
+      "baseCost": 175,
+      "costGrowth": 2.2,
+      "effects": [
+        6,
+        7.8,
+        10.14,
+        13.182,
+        17.1366,
+        22.27758,
+        28.960854,
+        37.6491102,
+        48.94384326,
+        63.626996238
+      ],
+      "cumulativeCost": [
+        0,
+        175,
+        560,
+        1407,
+        3270.4,
+        7369.88,
+        16388.736,
+        36230.2192,
+        79881.48224,
+        175914.260928
+      ]
+    },
+    "tankCapacity": {
+      "displayName": "Tank Capacity",
+      "description": "Cubes the vacuum tank holds (list below)",
+      "unit": "cubes",
+      "baseCost": 125,
+      "costGrowth": 2.2,
+      "effects": [
+        60,
+        90,
+        130,
+        190,
+        270,
+        380,
+        530,
+        740,
+        1030,
+        1450
+      ],
+      "cumulativeCost": [
+        0,
+        125,
+        400,
+        1005,
+        2336,
+        5264.2,
+        11706.24,
+        25878.728,
+        57058.2016,
+        125653.04352
+      ]
+    },
+    "crusherSpeed": {
+      "displayName": "Crusher Speed",
+      "description": "Cubes per second the crusher processes",
+      "unit": "cubes/s",
+      "baseCost": 225,
+      "costGrowth": 2.2,
+      "effects": [
+        8,
+        10.4,
+        13.52,
+        17.576,
+        22.8488,
+        29.70344,
+        38.614472,
+        50.1988136,
+        65.25845768,
+        84.835994984
+      ],
+      "cumulativeCost": [
+        0,
+        225,
+        720,
+        1809,
+        4204.8,
+        9475.56,
+        21071.232,
+        46581.7104,
+        102704.76288,
+        226175.478336
+      ]
+    },
+    "oreSense": {
+      "displayName": "Ore Sense",
+      "description": "Cash multiplier on every cube (adds per level)",
+      "unit": "x cash",
+      "baseCost": 375,
+      "costGrowth": 2.2,
+      "effects": [
+        1,
+        1.08,
+        1.16,
+        1.24,
+        1.32,
+        1.4,
+        1.48,
+        1.56,
+        1.64,
+        1.72
+      ],
+      "cumulativeCost": [
+        0,
+        375,
+        1200,
+        3015,
+        7008,
+        15792.6,
+        35118.72,
+        77636.184,
+        171174.6048,
+        376959.13056
+      ]
+    }
+  },
+  "bands": [
+    {
+      "id": 1,
+      "code": "B1",
+      "name": "Concrete lining",
+      "look": "Grey concrete & rebar, work lamps",
+      "hp": 10,
+      "value": 2,
+      "cubesOnPath": 850,
+      "overheadSeconds": 45,
+      "notes": "Tutorial band: every punch works, fast first wins",
+      "colorHex": "#ADB3B8"
+    },
+    {
+      "id": 2,
+      "code": "B2",
+      "name": "Packed earth & timber",
+      "look": "Dirt, rotten timber supports",
+      "hp": 25,
+      "value": 3.5,
+      "cubesOnPath": 1500,
+      "overheadSeconds": 60,
+      "notes": "First hidden room: old crew locker",
+      "colorHex": "#7A5230"
+    },
+    {
+      "id": 3,
+      "code": "B3",
+      "name": "Sandstone gallery",
+      "look": "Soft layered stone, old rail tracks",
+      "hp": 60,
+      "value": 6,
+      "cubesOnPath": 2300,
+      "overheadSeconds": 70,
+      "notes": "Equipment bay: first restored machine",
+      "colorHex": "#D19952"
+    },
+    {
+      "id": 4,
+      "code": "B4",
+      "name": "Granite core",
+      "look": "Hard speckled granite, heavy machinery",
+      "hp": 140,
+      "value": 10,
+      "cubesOnPath": 3500,
+      "overheadSeconds": 80,
+      "notes": "Pump room and generator",
+      "colorHex": "#6B6670"
+    },
+    {
+      "id": 5,
+      "code": "B5",
+      "name": "Ore veins",
+      "look": "Copper and iron seams, rich cubes",
+      "hp": 260,
+      "value": 30,
+      "cubesOnPath": 5000,
+      "overheadSeconds": 90,
+      "notes": "Big payday band: ore multiplier matters",
+      "colorHex": "#B86B35"
+    },
+    {
+      "id": 6,
+      "code": "B6",
+      "name": "Crystal vault",
+      "look": "Glowing geode crystals, humming light",
+      "hp": 420,
+      "value": 70,
+      "cubesOnPath": 7000,
+      "overheadSeconds": 100,
+      "notes": "Final band before the main shaft lift",
+      "colorHex": "#4FD6E8"
+    }
+  ],
+  "pacingModel": {
+    "patternEfficiency": 0.6,
+    "tripSeconds": 14,
+    "collectionEfficiency": 0.9,
+    "targetMinMinutes": 60,
+    "targetMaxMinutes": 90,
+    "healthyRatioLow": 1,
+    "healthyRatioHigh": 2.5,
+    "plannedLevelsAtBandStart": {
+      "punchPower": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        8,
+        10
+      ],
+      "punchSpeed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10
+      ],
+      "punchPattern": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10
+      ],
+      "vacuumSuction": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10
+      ],
+      "tankCapacity": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10
+      ],
+      "crusherSpeed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10
+      ],
+      "oreSense": [
+        1,
+        1,
+        2,
+        3,
+        4,
+        6,
+        10
+      ]
+    },
+    "spreadsheetResults": {
+      "timeInBandMinutes": [
+        7.203703704,
+        10.17989418,
+        12.666666667,
+        13.862031622,
+        15.399531716,
+        10.039432964
+      ],
+      "cashEarnedInBand": [
+        1530,
+        4725,
+        13413.6,
+        36540,
+        167400,
+        617400
+      ],
+      "cashNeededForNextUpgrades": [
+        1125,
+        2850,
+        7867.2,
+        15710.64,
+        110602.9056,
+        1369680.77664
+      ],
+      "totalRunMinutes": 69.351260852,
+      "totalCashEarned": 841008.6,
+      "cashToMaxEverything": 1507836.52224
+    }
+  },
+  "voxelSize": 0.5,
+  "worldSizeVoxels": [
+    96,
+    32,
+    96
+  ],
+  "startingCash": 0,
+  "secondsPerDay": 90,
+  "sweepRefundRatio": 0.6,
+  "treasureMaterials": [
+    {
+      "id": 7,
+      "key": "copperSeam",
+      "name": "Copper seam",
+      "hp": 45,
+      "value": 45,
+      "colorHex": "#D97A38",
+      "glows": false,
+      "bands": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 8,
+      "key": "goldSeam",
+      "name": "Gold seam",
+      "hp": 110,
+      "value": 180,
+      "colorHex": "#FFD626",
+      "glows": false,
+      "bands": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": 9,
+      "key": "geodeCrystal",
+      "name": "Geode crystal",
+      "hp": 220,
+      "value": 450,
+      "colorHex": "#8CF2FF",
+      "glows": true,
+      "bands": [
+        5,
+        6
+      ]
+    }
+  ],
+  "treasureDensity": {
+    "_comment": "Chance that a solid voxel outside the starting shell becomes a treasure voxel (1 in N). Nook treasure clusters are counted separately by the pacing check.",
+    "oneInVoxels": 600,
+    "nookClusterSize": 6
+  },
+  "charge": {
+    "tapThresholdSeconds": 0.18,
+    "fullChargeSeconds": 1.15,
+    "maxPatternBonusLevels": 2,
+    "maxDamageMultiplier": 2.0
+  },
+  "punch": {
+    "reachMeters": 2.4,
+    "inputBufferSeconds": 0.12
+  },
+  "dynamite": {
+    "startingStock": 3,
+    "fuseSeconds": 3.0,
+    "blastRadiusMeters": 1.75,
+    "blastDamage": 500
+  },
+  "storeItems": {
+    "dynamitePack": {
+      "cost": 400,
+      "sticks": 3
+    },
+    "autoPunch": {
+      "cost": 1200
+    },
+    "treasureDetector": {
+      "cost": 650,
+      "rangeMeters": 6.5
+    },
+    "headlampLevels": [
+      {
+        "level": 1,
+        "cost": 0,
+        "rangeMeters": 12,
+        "intensity": 1.6,
+        "spotAngle": 55
+      },
+      {
+        "level": 2,
+        "cost": 500,
+        "rangeMeters": 18,
+        "intensity": 2.2,
+        "spotAngle": 62
+      },
+      {
+        "level": 3,
+        "cost": 1800,
+        "rangeMeters": 26,
+        "intensity": 2.8,
+        "spotAngle": 70
+      }
+    ]
+  },
+  "equipment": {
+    "workGauntlets": {
+      "name": "Work Gauntlets",
+      "repairCost": 0,
+      "partId": "",
+      "source": "Old Gallery locker",
+      "punchDamageMultiplier": 1.15
+    },
+    "pneumaticHammer": {
+      "name": "Pneumatic Hammer",
+      "repairCost": 2500,
+      "partId": "hammerPiston",
+      "source": "Equipment Bay",
+      "punchSpeedMultiplier": 1.25
+    },
+    "conveyor": {
+      "name": "Conveyor",
+      "repairCost": 3000,
+      "partId": "conveyorMotor",
+      "source": "Equipment Bay"
+    },
+    "rockDrill": {
+      "name": "Rock Drill",
+      "repairCost": 20000,
+      "partId": "drillBit",
+      "source": "Pump Room",
+      "depthLayers": 3
+    }
+  },
+  "vacuumVisualTiers": {
+    "_comment": "Tank Capacity level at which each vacuum look appears: Dust-buster, Ore Hoover, Suction Cannon.",
+    "fromTankLevel": [
+      1,
+      4,
+      7
+    ]
+  },
+  "monetization": {
+    "doubleCashDurationSeconds": 300,
+    "doubleCashCooldownSeconds": 600,
+    "freeDynamiteSticks": 2,
+    "freeDynamitePerSession": 3,
+    "adFreeGracePeriodSeconds": 300,
+    "removeAdsProductId": "remove_ads",
+    "removeAdsDoubleCashCooldownSeconds": 1200,
+    "removeAdsFreeDynamitePerSession": 2
+  },
+  "tiers": {
+    "low": {
+      "rubbleCap": 100,
+      "targetFps": 30,
+      "physicsHz": 30,
+      "renderScale": 0.7,
+      "shadowDistance": 0,
+      "farClip": 22,
+      "mainLightShadows": false
+    },
+    "mid": {
+      "rubbleCap": 200,
+      "targetFps": 60,
+      "physicsHz": 50,
+      "renderScale": 0.9,
+      "shadowDistance": 12,
+      "farClip": 32,
+      "mainLightShadows": true
+    },
+    "high": {
+      "rubbleCap": 400,
+      "targetFps": 60,
+      "physicsHz": 60,
+      "renderScale": 1.0,
+      "shadowDistance": 25,
+      "farClip": 45,
+      "mainLightShadows": true
+    },
+    "thermalGuard": {
+      "checkIntervalSeconds": 5,
+      "minAverageFpsAt60": 48,
+      "minAverageFpsAt30": 26,
+      "rubbleCapStepDown": 0.75,
+      "minimumRubbleCap": 80
+    },
+    "detection": {
+      "lowMaxRamMb": 4200,
+      "lowMaxCores": 4,
+      "lowMaxGraphicsMb": 1024,
+      "highMinRamMb": 7200,
+      "highMinCores": 8
+    }
+  }
+}

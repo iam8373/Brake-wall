@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Baseline: the untouched first-draft scripts in codebase/, editor code included. -->
+  <PropertyGroup><DefineConstants>UNITY_EDITOR</DefineConstants></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="UnityStubs/*.cs" />
+    <Compile Include="../../codebase/*.cs" />
+  </ItemGroup>
+</Project>

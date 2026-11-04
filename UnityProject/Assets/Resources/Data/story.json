@@ -1,0 +1,105 @@
+{
+  "_comment": "All story text for Break to Escape. Original writing for this game. Keep lines short: they are read on a phone in landscape.",
+  "gateCode": { "quill": 14, "pike": 3, "bellamy": 96 },
+  "logbooks": [
+    {
+      "id": "quill",
+      "owner": "Foreman Quill",
+      "codeSlot": 0,
+      "title": "Foreman Quill - Shift Log",
+      "body": "Day 3 after the fall. Radio says help is coming. Radio says a lot of things.\n\nThe lift gate takes three numbers. Head office gave each of us one so nobody could leave early. Very trusting people.\n\nMine is the number of years I have run this crew. Fourteen. Fourteen years and nobody ever fixed the squeak in that lift.\n\nIf you are reading this, take my gauntlets. They outlasted me on the job, they can outlast you too."
+    },
+    {
+      "id": "pike",
+      "owner": "Surveyor Pike",
+      "codeSlot": 1,
+      "title": "Surveyor Pike - Field Notes",
+      "body": "Measurement 41: the east wall has moved 2 mm since yesterday. I have measured it four times. It is still 2 mm.\n\nGate dial two is mine. It is 03. Zero, three. The dial wants both digits. Do not dial a plain 3 and then blame the lift.\n\nI have written the number on this page, on my hard hat and on my hand. I am not worried. I am thorough.\n\nThe Equipment Bay machines are not broken. They are missing parts. There is a difference, and the Company Store will charge you for it."
+    },
+    {
+      "id": "bellamy",
+      "owner": "Cook Bellamy",
+      "codeSlot": 2,
+      "title": "Cook Bellamy - Kitchen Diary",
+      "body": "Rations are fine. By fine I mean beans. By beans I mean the last tin of beans.\n\nThe third gate number is the top mark on my old stove: 96. The stove never once reached it. Neither did my pay.\n\nThe generator down here drinks fuel cells like Quill drinks tea. I tucked a spare cell in the little stash east of here, behind the rock. Nobody steals from a cook.\n\nIf you get out, eat something warm. Tell the sky I said hello."
+    }
+  ],
+  "notes": [
+    { "id": "note_01", "title": "Chalk on the wall", "body": "SHIFT 9 - STILL ON THE CLOCK" },
+    { "id": "note_02", "title": "Locker tag", "body": "PROPERTY OF QUILL. If found, return to Quill. If Quill is not found, keep digging." },
+    { "id": "note_03", "title": "Repair ticket", "body": "Hammer: piston missing. Conveyor: motor missing. Company policy: parts are your problem." },
+    { "id": "note_04", "title": "Pump Room sign", "body": "GENERATOR RUNS ON ONE FUEL CELL. DO NOT LICK THE FUEL CELL." },
+    { "id": "note_05", "title": "Cable drum label", "body": "Winch cable, 300 m. Rated for one lift. Please lift responsibly." },
+    { "id": "note_06", "title": "Scratched in crystal", "body": "The rock hums down here. Pike says it is the water. Pike says a lot of things now." },
+    { "id": "note_07", "title": "Lift gate plate", "body": "MAIN SHAFT LIFT. POWER, CABLE AND THREE-NUMBER CODE REQUIRED. HAVE A NICE DAY." },
+    { "id": "note_08", "title": "Pencil on a timber", "body": "Somebody keeps borrowing my dynamite. If it is you, at least light it pointing away from me." },
+    { "id": "note_09", "title": "Survey stake", "body": "Granite. Hard. Slow. Like the payroll department." },
+    { "id": "note_10", "title": "Bellamy's recipe card", "body": "Geode soup: one geode, one pot, three weeks. Serves nobody." }
+  ],
+  "dispatch": {
+    "wake": "DISPATCH: Good morning, Worker 17. Day 1. The mine is not impressed with you.",
+    "tutorial_1": "DISPATCH: Punch the wall. It has it coming.",
+    "tutorial_2": "DISPATCH: Cubes are cash. Hold VACUUM.",
+    "tutorial_3": "DISPATCH: Crusher 07 is hungry. Feed it.",
+    "tutorial_4": "DISPATCH: The Company Store is open. Of course it is.",
+    "tutorial_5": "DISPATCH: Dig deeper.",
+    "day_start": "DISPATCH: Day {0}. Your attendance has been noted.",
+    "band_2": "DISPATCH: Packed earth ahead. Mind the old timbers. Or don't.",
+    "band_3": "DISPATCH: Sandstone gallery. The rails lead nowhere. Very on brand.",
+    "band_4": "DISPATCH: Granite core. Harder rock, same pay grade.",
+    "band_5": "DISPATCH: Ore veins detected. Management is suddenly interested.",
+    "band_6": "DISPATCH: Crystal vault. Please do not hum back at the walls.",
+    "treasure": "DISPATCH: Treasure found. Finders keepers. The Company keeps a percentage, in spirit.",
+    "locker_opened": "DISPATCH: Work Gauntlets recovered. Hands are now 15 percent more expensive.",
+    "part_found": "DISPATCH: Machine part found. Repairs are available at the Company Store, for a fee.",
+    "repair_done": "DISPATCH: Equipment restored. Warranty void, as always.",
+    "missing_part": "DISPATCH: Repair refused. Bring the missing part. And money.",
+    "not_enough_cash": "DISPATCH: Insufficient funds. Have you tried working harder?",
+    "fuel_cell_found": "DISPATCH: Fuel cell acquired. Handle with care. Or at least with gloves.",
+    "generator_need_fuel": "DISPATCH: The generator needs a fuel cell. It will not run on optimism.",
+    "generator_repaired": "DISPATCH: Reserve generator online. The lift has power. Try not to waste it.",
+    "cable_recovered": "DISPATCH: Winch cable secured. Only the lift-gate code remains.",
+    "gate_need_power": "DISPATCH: The lift has no power. Restore the Pump Room generator first.",
+    "gate_need_cable": "DISPATCH: The lift has no cable. Check the Ore Veins store.",
+    "gate_wrong_code": "DISPATCH: Incorrect code. The crew logbooks have the numbers. Read them.",
+    "gate_open": "DISPATCH: Lift gate open. Shift 9 is complete.",
+    "escape": "DISPATCH: Your final store balance will be deducted from your pension.",
+    "logbook_found": "DISPATCH: Logbook found. Reading on company time is permitted, this once.",
+    "dynamite_found": "DISPATCH: Dynamite crate found. Stick it to a wall, then stand somewhere else.",
+    "double_cash_on": "DISPATCH: Double cash for {0} minutes. Spend it before we change our minds.",
+    "tank_full": "DISPATCH: Tank full. Blow it out at Crusher 07.",
+    "saved": "DISPATCH: Progress saved. The mine remembers everything."
+  },
+  "hardHats": {
+    "Quill": "A dented hard hat. Inside the brim: QUILL - 14 YEARS.",
+    "Pike": "A spotless hard hat. Written on the side: PIKE. DIAL TWO = 03. ZERO THREE.",
+    "Bellamy": "A hard hat with a spoon taped to it. Name tag: BELLAMY. The stove dial shows 96."
+  },
+  "interactPrompts": {
+    "StoreTerminal": "OPEN STORE",
+    "CrewLocker": "OPEN LOCKER",
+    "Logbook": "READ LOGBOOK",
+    "HardHat": "LOOK AT HARD HAT",
+    "WallNote": "READ NOTE",
+    "RepairPart": "TAKE PART",
+    "FuelCell": "TAKE FUEL CELL",
+    "Generator": "REPAIR GENERATOR",
+    "WinchCable": "TAKE WINCH CABLE",
+    "DynamiteCrate": "OPEN CRATE",
+    "LiftGate": "USE LIFT GATE"
+  },
+  "ending": {
+    "title": "YOU ESCAPED GREYWATER DEEP",
+    "lines": [
+      "The lift groans, the cable holds, and the dark falls away below you.",
+      "Daylight. Real daylight. It is much brighter than the brochure said.",
+      "Somewhere far below, Crusher 07 keeps running. It will miss you. Probably."
+    ],
+    "newShiftTeaser": "COMING LATER: NEW SHIFT - a different mine every time."
+  },
+  "credits": [
+    "BREAK TO ESCAPE",
+    "Design, code and words: the Break to Escape team",
+    "Thank you for playing."
+  ]
+}
