@@ -15,10 +15,12 @@ You are the last worker trapped in a collapsed underground mining complex. Punch
 | Area | Status |
 |---|---|
 | Game design | Complete first version (design document, economy model, technical plan, wireframes) |
-| Code | A first-draft Unity C# codebase exists (19 scripts + 1 JSON, about 4,300 lines). **It has never been compiled in Unity, never run, never built for Android and never tested on a phone.** |
-| Known blockers | Static inspection found compile-breaking errors, a scene builder that places the player inside solid rock, a punch that breaks only 1 cube, and several unreachable systems. |
-| Playable prototype | **Not yet.** |
-| Release | Not started (no Google Play account steps, store listing, ad or billing SDKs yet) |
+| Code | A reworked Unity C# codebase in `UnityProject/Assets/` addresses every issue in the status report (P0-1 … P3-7). **It has never been compiled in Unity, never run, never built for Android and never tested on a phone.** |
+| Verification so far | Type-checked against stand-ins of the Unity API: 0 errors, 0 warnings. Pure game logic (economy, punch patterns, voxel grid, ray traversal, rubble pool, save, escape chain, monetization rules, tiers, mine generators): **75 automated tests, all passing outside Unity**. Economy data generated from the spreadsheet; pacing reproduced (69.4 minutes). A stub type-check is not a Unity compile. |
+| Unity compile / scene run / Android build / device test | **No / No / No / No** |
+| Assets | Primitive placeholders only; no sounds, models or UI art yet (`docs/ASSET_REQUIREMENTS.md`). |
+| Playable prototype | **Not yet demonstrated.** Next step: import into Unity 6.3 LTS following `UnityProject/README_UNITY_SETUP.md`. |
+| Release | Not started (no Google Play account steps, store listing, ad or billing SDKs installed; integration guide in `docs/ANDROID_BUILD_CHECKLIST.md`) |
 
 **Nothing in this repository should be assumed to work until it has been compiled and tested on a real Android phone.** Written code is not tested code. The full audit is in [`docs/Break_to_Escape_Development_Status_Report.md`](docs/Break_to_Escape_Development_Status_Report.md).
 
@@ -38,9 +40,22 @@ docs/
   economy/
     Break_to_Escape_Economy.xlsx            Economy model with live formulas
     ECONOMY_TABLES.md                       The same numbers as readable tables
-codebase/
-  Break_to_Escape_Full_Unity_Codebase.zip   First-draft Unity scripts, exactly as supplied
-  original-scripts/                         The same files unzipped for easy reading
+  PROGRESS.md                               Task list, test counts, verification results
+  DECISIONS.md                              Choices made during implementation, with reasons
+  ASSET_REQUIREMENTS.md                     Every sound, model, sprite and icon still needed
+  ANDROID_BUILD_CHECKLIST.md                Player settings, URP tiers, 16 KB, ads, billing, Play Console
+  ASSET_LICENCES.md                         Licence log for third-party files
+codebase/                                   First-draft Unity scripts (19 .cs + economy_config.json), kept untouched as the original
+UnityProject/
+  README_UNITY_SETUP.md                     Step-by-step owner guide: import into Unity, build the scene, Play, build to a phone
+  Assets/Scripts/Core/                      Game rules with no Unity dependency (tested)
+  Assets/Scripts/...                        World, Player, Rubble, Economy, Story, UI, Save, Audio, Services, Performance, Effects, Bootstrap, Editor
+  Assets/Resources/Data/                    economy.json (generated from the spreadsheet), story.json, audio.json
+  Assets/Shaders/                           URP voxel and unlit vertex-colour shaders
+  Assets/Tests/EditMode/                    NUnit tests (run in Unity's Test Runner and with dotnet test)
+tools/
+  verify/                                   Type-check harness, economy JSON generator, pacing check
+  tests/                                    dotnet test project for the pure-logic tests
 ```
 
 **Suggested reading order:**
@@ -50,7 +65,8 @@ codebase/
 4. `docs/economy/ECONOMY_TABLES.md` (numbers).
 5. `docs/Technical_Budget_and_Production_Plan` (budgets, tiers, schedule).
 6. `docs/wireframes/WIREFRAMES.md` (touch UI).
-7. `codebase/original-scripts/` (the code).
+7. `docs/PROGRESS.md` and `docs/DECISIONS.md` (what was done, and why).
+8. `UnityProject/README_UNITY_SETUP.md` (how to get it running in Unity).
 
 ---
 
@@ -326,9 +342,11 @@ Rule: the first cash payout and the first upgrade must happen within 2 minutes.
 
 ---
 
-## 15. The existing codebase
+## 15. The codebase
 
-The `codebase/` folder holds a **first-draft Unity codebase**: 19 C# scripts and 1 JSON file (4,264 lines of C#). It was written from the design documents and has not been compiled, run or tested.
+**Working code:** `UnityProject/Assets/` (see the repository layout above). Start with `Assets/Scripts/Bootstrap/GameBootstrap.cs`, which owns the start-up order, and `UnityProject/README_UNITY_SETUP.md`.
+
+**Original first draft (kept untouched):** the `codebase/` folder holds the first-draft Unity codebase: 19 C# scripts and 1 JSON file (4,264 lines of C#). It was written from the design documents and has not been compiled, run or tested. The table below describes those original files; each was ported (fixed) into the matching folder under `UnityProject/Assets/Scripts/`.
 
 | File | Role |
 |---|---|
@@ -352,16 +370,13 @@ The `codebase/` folder holds a **first-draft Unity codebase**: 19 C# scripts and
 | `SceneAutoBuilderEditor.cs` | Editor-only one-click scene and UI builder |
 
 ### How to import it safely
-1. Create a clean Unity 6.3 LTS URP project; set Landscape Left; set Active Input Handling to **Both**; import TextMeshPro essentials.
-2. Put the project under Git and commit the original files untouched first.
-3. Add the scripts **in groups** (world and data; rubble and tools; economy and UI; services; the editor builder), fixing compile errors after each group.
-4. Run the builder, press Play in the editor, then build to a phone.
+Follow `UnityProject/README_UNITY_SETUP.md`: clean Unity 6.3 LTS Universal 3D project, Active Input Handling **Both**, TextMeshPro essentials, copy `UnityProject/Assets` in three groups (core and data; runtime scripts and shaders; editor builder), read the first compile error after each group, run **BreakToEscape > Build Complete Playable Scene**, press Play, then build to a phone.
 
 ---
 
-## 16. Known critical issues (summary)
+## 16. Critical issues found in the first draft (summary)
 
-Full detail, evidence, fixes and verification steps are in the status report. The most important:
+All of these now have a code change in `UnityProject/Assets/` (status per issue in the status report's "Update 4 November 2026" section). None has been verified in Unity yet. The most important, as found in the first draft:
 
 | ID | Issue |
 |---|---|
@@ -379,7 +394,7 @@ Full detail, evidence, fixes and verification steps are in the status report. Th
 | P1-7 | Pneumatic Hammer, Rock Drill and Conveyor can never be unlocked |
 | P1-8 | Three of seven upgrade lines have no shop button |
 
-Also missing: all audio clips, all production 3D models and UI art, all story text, particle effects, real ad and billing SDKs, procedural generation.
+Still missing after the implementation pass: all audio clips, all production 3D models and UI art, real ad and billing SDKs (adapters and guide exist), and every Unity and device test. Story text, code-built particle effects and a seeded procedural generator (behind a flag) now exist.
 
 ---
 

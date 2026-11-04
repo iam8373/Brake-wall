@@ -1,11 +1,78 @@
 # Break to Escape — Complete Development Status, Code Audit and Roadmap
 
-**Report date:** 3 November 2026
-**Scope:** documentation, verification and project-status reporting only. No game code was written or modified for this report.
+**Report date:** 3 November 2026 · **Updated:** 4 November 2026 (implementation pass, see "Update 4 November 2026" below)
+**Scope:** the original audit (sections 1–16) plus the implementation pass. The original first-draft scripts in `codebase/` were not modified; the working code is in `UnityProject/Assets/`.
 **Target platform:** Android phones only (Google Play)
 **Engine plan:** Unity 6.3 LTS, URP, C#, IL2CPP, ARM64
 
-> **Headline status (read this first):** The game has a complete design package and a first-draft code package written by an AI assistant (Gemini "Argon"). **The code has never been compiled in Unity, the scene has never been generated or run, no Android build exists, and nothing has been tested on a phone.** Static inspection found **at least 10 compile-breaking errors**, a **scene builder that spawns the player inside solid rock**, and a **punch system that breaks only 1 cube per normal punch**. The package is a useful starting scaffold, not a playable prototype and not "100% complete".
+> **Headline status at the original audit (3 November):** The game has a complete design package and a first-draft code package supplied by an outside contributor. **The code has never been compiled in Unity, the scene has never been generated or run, no Android build exists, and nothing has been tested on a phone.** Static inspection found **at least 10 compile-breaking errors**, a **scene builder that spawns the player inside solid rock**, and a **punch system that breaks only 1 cube per normal punch**. The package is a useful starting scaffold, not a playable prototype and not "100% complete".
+
+
+> **Headline status after the implementation pass (4 November):** every P0, P1, P2 and P3 issue has a code change in `UnityProject/Assets/`, and the pure game logic now has automated tests. **It is still true that nothing has been compiled in Unity, run in a scene, built for Android or tested on a phone.** The new code was type-checked against stand-ins of the Unity API (0 errors, 0 warnings) and 75 pure-logic tests pass outside Unity. Expect a first round of compile errors when the files are imported into a real Unity 6.3 project; `UnityProject/README_UNITY_SETUP.md` explains what to send back.
+
+## Update 4 November 2026 — implementation pass
+
+### Verification (honest)
+
+| Check | Result |
+|---|---|
+| Compiled in Unity | **No** |
+| Scene generated and run | **No** |
+| Android build | **No** |
+| Device test | **No** |
+| Type-check harness (`tools/verify/run.sh all`, compiles against hand-written Unity API stubs) | **0 errors, 0 warnings** in game code, in three configurations (player with legacy input, player with the Input System, editor). Baseline on the untouched first draft: 75 errors, all caused by the 10 literals of P0-1. **A stub type-check is not a Unity compile.** |
+| `dotnet test` (`tools/tests`, Unity-independent logic) | **75 tests, 75 passed** |
+| Economy data vs spreadsheet | `economy.json` is generated from the spreadsheet; check passes |
+| Pacing model | Reproduced exactly from the data (69.4 minutes); the game enforces the same rates |
+
+### Issue status after this pass
+
+Status words as defined in "How to read this report", plus ***Logic tested outside Unity*** for pure C# logic covered by `dotnet test`. Every row is additionally **Not tested or unverified in Unity**.
+
+| ID | Change made | Status now |
+|---|---|---|
+| P0-1 | Captions rewritten in the Dispatch voice and moved to `Resources/Data/story.json`; button labels use `\n`. | Implemented in code (type-checked) |
+| P0-2 | `UnityProject/README_UNITY_SETUP.md`: grouped import, first-error reporting, first-10-minutes and what-to-send-back lists; verification harness in `tools/verify`. | Implemented in code |
+| P0-3 | `PlayerInputSource` is the only input reader: Input System path (enhanced touch) and legacy path, both type-checked; builder adds `InputSystemUIInputModule` or `StandaloneInputModule` to match. | Implemented in code |
+| P0-4 | `MineLayout` contract computed by the generator (spawn, crusher, lift gate, rooms, interactables, treasure); builder and runtime place everything from it; asset files under `Assets/Generated`; scene saved to `Assets/Scenes/Main.unity`; all five screens + Settings built and wired. | Logic tested outside Unity (layout contract: spawn on the floor facing a wall with the crusher in front); builder Implemented in code |
+| P0-5 | Explicit pattern shapes (5…97 exactly, symmetric), the real pattern level passed to the world, charged punch +2 levels max (cap 10) and ×2 damage max, Rock Drill per-layer damage. | Logic tested outside Unity |
+| P1-1 | Grid ray traversal for aim, preview, punch, dynamite and interaction; collider re-cook on a per-frame budget into a second mesh buffer; chunks built near the spawn first; hot loop with direct indexing, flat normals, UVs, 16-bit indices. | Logic tested outside Unity (ray); rest Implemented in code |
+| P1-2 | Explicit cube states; idempotent return; sweep only settled, unprocessed cubes, paid once; in-flight cubes reserve tank space; refused spawns pay their refund at once. | Logic tested outside Unity (10,000-step stress test) |
+| P1-3 | Save v2 with every field; edits applied before the first mesh build; stats derived from the tables; checksum, temp file, backup and recovery; v1 migration; background writes, 45 s auto-save, pause save. | Logic tested outside Unity |
+| P1-4 | Punch cooldown from Punch Speed (with input buffer; auto-punch uses it), vacuum token bucket, crusher rate kept, rate overlay, `tools/verify/pacing_check.py`. | Logic tested outside Unity |
+| P1-5 | Fuel cell, generator, winch cable, three logbooks, crew locker, hard hats, wall notes, dynamite crates; lift gate → ending → credits with time and cubes broken and the New Shift teaser; all text original in `story.json`. | Logic tested outside Unity (escape chain, content); objects Present as a prototype (primitives) |
+| P1-6 | `IAdService`, `IPurchaseService`, `IAnalyticsService`, `ICrashService`; test fallbacks only in editor and development builds; durations, cooldown, cap and grace period from data; ads-removed saved; guarded adapters and an integration guide. | Logic tested outside Unity (rules); SDK adapters Not tested or unverified |
+| P1-7 | Repair at the store needs the found part plus cash; Work Gauntlets come from the Old Gallery locker; no automatic grants. | Logic tested outside Unity |
+| P1-8 | Seven upgrade cards (name, Lv a → b, effect, BUY $price, disabled when unaffordable) plus supplies, repairs, ad boost, Remove Ads and Restore Purchases. | Implemented in code |
+| P1-9 | Preview reads the cube size from the world; no 0.25 m assumption remains. | Implemented in code |
+| P1-10 | One frame-rate owner; URP render scale and shadow distance per tier; main light shadows per tier; caps 100 / 200 / 400 from data; pool sized to the tier; guard lowers the cap first; manual override; detection logged. | Logic tested outside Unity (policy); URP calls Implemented in code |
+| P1-11 | `BreakToEscape/VoxelLit` (vertex colour, main and additional lights, shadows, fog, crystal glow, shadow caster) and `BreakToEscape/UnlitVertexColor`; built-in-pipeline lookup removed; visible fallback and error. | Implemented in code, Not tested or unverified (never compiled) |
+| P1-12 (new) | `UIHoldButton` was declared inside `MobileVirtualJoystick.cs`. Unity can only save a MonoBehaviour whose file name matches its class, so PUNCH and VACUUM would lose their hold behaviour after the scene was saved and reopened. Moved to its own file; every MonoBehaviour now matches its file. | Implemented in code |
+| P1-13 (new) | Dynamite blast damage was 15, below every rock band's hit points except band 1, so dynamite could not clear hard rock. Now 500 from data. | Implemented in code |
+| P2-1 | See P0-5. | Logic tested outside Unity |
+| P2-2 | Caps from data, pool by tier, logging. | Implemented in code |
+| P2-3 | `economy.json` generated from the spreadsheet by a script; single loader; old tables and `economy_config.json` retired from the working tree. | Logic tested outside Unity |
+| P2-4 | One treasure system (treasure voxels) plus four named buried objects; density lowered to 1 in 600; payout modelled (+1–5 % per band). | Logic tested outside Unity |
+| P2-5 | Directional bands and the design map (rooms west, east, south, north; dead-end tunnels; hidden nooks with treasure, notes and dynamite). | Logic tested outside Unity |
+| P2-6 | Safe-area fitter, left-handed mirroring of every thumb control and the look zone, ≥ 48 dp buttons. | Implemented in code |
+| P2-7 | Tool controller split into punch, dynamite, headlamp, viewmodel animator and aim; timings and curves in the inspector. | Implemented in code |
+| P2-8 | `GameBootstrap` owns start-up order. | Implemented in code |
+| P2-9 | See P1-1. | Implemented in code |
+| P2-10 | Tutorial steps advance only on real actions; first cash and first upgrade times logged; model estimate under 90 s. | Logic tested outside Unity |
+| P2-11 | Struck material captured before damage; empty clip slots safe; clips loaded by name from `audio.json`. | Implemented in code |
+| P2-12 | Thresholds moved to data, tuned for an 8 GB phone reporting slightly less; unknown GPU memory ignored; manual override. | Logic tested outside Unity; still to tune on phones |
+| P2-13 | Map built from real room bounds with "?" for undiscovered rooms and a player pin. | Implemented in code |
+| P2-14 (new) | Per-cube `MaterialPropertyBlock` colours on rubble defeat URP batching (hundreds of draw calls at the cap). Rubble now uses one shared material per voxel material. | Implemented in code |
+| P2-15 (new) | Run time and the day timer were not saved, so the ending's total time only counted since the last launch. Both are now saved. | Logic tested outside Unity |
+| P3-1 | Vibrator via `VibratorManager` on Android 12+, `VibrationEffect` on 8+. | Implemented in code |
+| P3-2 | Headlamp with 3 levels (range, intensity, cone) from data, flicker. | Implemented in code |
+| P3-3 | Singletons kept for the prototype. | Recorded (D4) |
+| P3-4 | All new UI text checked for consistency. | Done |
+| P3-5 | Ending, credits and New Shift teaser written. | Done |
+| P3-6 (new) | Dynamite was thrown at 16 m/s and stuck to any collider, including rubble and the player. Now a short reach-and-place onto a grid-ray hit. | Implemented in code |
+| P3-7 (new) | The README listed `codebase/Break_to_Escape_Full_Unity_Codebase.zip` and `codebase/original-scripts/`, which are not in the repository (the scripts sit directly in `codebase/`). README corrected. | Done |
+
+Further detail: `docs/PROGRESS.md` (task list, test counts), `docs/DECISIONS.md` (choices made, with reasons), `docs/ASSET_REQUIREMENTS.md`, `docs/ANDROID_BUILD_CHECKLIST.md`.
 
 ---
 
@@ -16,9 +83,9 @@ Every statement is tagged by where it comes from:
 | Tag | Meaning |
 |---|---|
 | **[V]** | **Verified** by inspecting the actual files in the ZIP (reading, search, or scripted checks) |
-| **[E]** | **Earlier AI review finding** (from a previous review of this project), re-checked here where stated |
+| **[E]** | **Earlier review finding** (from a previous review of this project), re-checked here where stated |
 | **[C]** | **Conclusion / recommendation** by the author of this report |
-| **[G]** | **Gemini Argon's claim** in its own documents (not trusted until verified) |
+| **[G]** | **The first-draft supplier's claim** in its hand-off documents (not trusted until verified) |
 
 Feature status uses exactly these labels:
 
@@ -35,7 +102,7 @@ Feature status uses exactly these labels:
 
 | Check | Result |
 |---|---|
-| Read all seven code-generation hand-off documents, the ZIP, and the three design-note text files (`argon.txt`, `argon2.txt`, `animation.txt`) | Done. All were available. |
+| Read all seven code-generation hand-off documents, the ZIP, and the three design-note text files (hand-off notes A, B and C) | Done. All were available. |
 | Unzipped the codebase and inspected the files | Done (see file inventory in section 5). |
 | Compiled the code in Unity | **Not done.** No Unity editor or C# compiler was available in the review environment. |
 | Ran the one-click scene builder | **Not done.** |
@@ -103,13 +170,13 @@ The intended game includes:
 | 2 | Hand-off document 2 | First-draft voxel world (0.25 m cubes, 5 bands), dual-thumb controller, economy manager, exit-vault controller | Read in full as text |
 | 3 | Hand-off document 3 | Save, audio and haptics, treasure and map, device tier scaler, monetization | Read in full as text |
 | 4 | Hand-off document 4 | Virtual joystick, hold button, one-click scene builder | Read in full as text |
-| 5 | Hand-off document 5 | Gemini's claims about the "upgraded" ZIP and a setup guide | Read in full |
+| 5 | Hand-off document 5 | The supplier's claims about the "upgraded" ZIP and a setup guide | Read in full |
 | 6 | Hand-off document 6 | Explains the first (18-file) and second (upgraded) lists | Read in full |
-| 7 | Hand-off document 7 | The 20-file list and Gemini's status summary ("100% complete") | Read in full |
-| 8 | `Break_to_Escape_Full_Unity_Codebase.zip` | 19 C# files plus 1 JSON file | Unzipped and inspected (section 5). Gemini's text refers to a `_2.zip`; the supplied file has no `_2` in its name and is assumed to be the same package. |
-| 9 | `argon.txt` | Gemini's analysis of the reference videos and its animation advice | Read in full |
-| 10 | `argon2.txt` | Gemini's follow-up with the first-person tool controller and dynamite scripts | Read in full |
-| 11 | `animation.txt` | Another assistant's answer on which elements need animation | Read in full |
+| 7 | Hand-off document 7 | The 20-file list and the supplier's status summary ("100% complete") | Read in full |
+| 8 | `Break_to_Escape_Full_Unity_Codebase.zip` | 19 C# files plus 1 JSON file | Unzipped and inspected (section 5). The supplier's text refers to a `_2.zip`; the supplied file has no `_2` in its name and is assumed to be the same package. |
+| 9 | Hand-off note A | The supplier's analysis of the reference videos and animation advice | Read in full |
+| 10 | Hand-off note B | The supplier's follow-up with the first-person tool controller and dynamite scripts | Read in full |
+| 11 | Hand-off note C | A separate review note on which elements need animation | Read in full |
 | 12 | All scripts, JSON, builder | See section 5 | Inspected; no editor available |
 | 13 | Five reference videos and seven screenshots | Viewed earlier in the project as frame contact sheets and images. Audio was **not** listened to: only loudness was measured (about -20 LUFS gameplay, about -14 LUFS trailer clip). Sound design in this report is therefore a requirements list, not a description of the reference. | Visual review only |
 
@@ -132,7 +199,7 @@ The reference footage (a commercially released first-person wall-punching game) 
 | Rock bands | 6 bands (hit points 10, 25, 60, 140, 260, 420; cube value $2, 3.50, 6, 10, 30, 70) |
 | Upgrades | 7 lines × 10 levels, cost growth ×2.2 per level |
 | Target run | About 60–90 minutes; the spreadsheet model predicts about 69 minutes |
-| Animation | Code-driven transforms for rigid arm and tool movement; AI tools only for static models |
+| Animation | Code-driven transforms for rigid arm and tool movement; external modelling tools only for static models |
 | Version 1 scope | One hand-built mine; procedural prisons later |
 | Performance tiers | Low / Mid / High with rubble caps of 100 / 150–250 / 400 |
 | World size | About 100 × 50 × 100 cubes (design) |
@@ -149,8 +216,8 @@ The reference footage (a commercially released first-person wall-punching game) 
 | Economy spreadsheet | Built with live formulas; recalculated without errors; 69-minute run | `Break_to_Escape_Economy.xlsx` |
 | Technical budget and production plan | Written | Shared document |
 | Touch-screen wireframes | 5 screens drawn | Shared design canvas |
-| Animation approach decision | Code-driven chosen over AI skeletal animation | Section 11 |
-| First-draft C# codebase | 19 scripts + 1 JSON, written by Gemini Argon | ZIP |
+| Animation approach decision | Code-driven chosen over skeletal animation | Section 11 |
+| First-draft C# codebase | 19 scripts + 1 JSON, supplied as a first draft | ZIP |
 | Compilation in Unity | **Not done** | — |
 | Scene generation and play test | **Not done** | — |
 | Android build | **Not done** | — |
@@ -218,57 +285,48 @@ The reference footage (a commercially released first-person wall-punching game) 
 
 ## 6. Features Implemented
 
-"Implemented" here means **written in code**. **None has been run.**
+*Updated 4 November 2026.* "Implemented" means **written in code**. **None has been run in Unity.** The original audit's tables for the first draft are summarised in section 8.
 
 | Feature | Status | Notes |
 |---|---|---|
-| Voxel grid, chunking, face-culled meshes | Implemented in code | 96 × 32 × 96 cubes (6 × 2 × 6 chunks). **Not tested or unverified.** |
-| 6 material bands + 3 treasure materials | Implemented in code | Hit points and values match the spreadsheet. Bands are rings around the centre, not the designed directional layout. |
-| Upgrade tables and cost formula | Implemented in code | All seven tables match the spreadsheet; cost = base × 2.2^(level−1); base costs 150 / 200 / 250 / 175 / 125 / 225 / 375 match. |
-| Crusher with rate-limited queue and floating cash | Implemented in code | Rate comes from the crusher table. |
-| Vacuum suction on a Bezier curve | Implemented in code | Rate is not limited (see P1-4). |
-| Blow-out mode | Implemented in code | Tank count and stack can disagree after loading (P1-3). |
-| 60% sweep-up bonus | Implemented in code | 60% ratio in code; has a double-pay bug (P1-2). |
-| Rubble pooling and sleeping | Implemented in code | 400 prewarmed; has the P1-2 bug. |
-| Dynamite throw, stick, fuse, blast, treasure destruction | Implemented in code | No particle effects. Dynamite removes treasure cubes without spawning rubble. |
-| Hotbar and tool switching | Implemented in code | Wired by the scene builder. |
-| Touch joystick, look drag, hold buttons | Implemented in code | Uses the legacy input API (P0-3). |
-| Cash / income / day / tank HUD and caption banner | Implemented in code | Created by the scene builder. |
-| First-person arm, vacuum and dynamite animation (code-driven) | Implemented in code | See section 11. |
-| Aim assist (sphere cast) | Implemented in code | Physics-based (P1-1). |
-| Auto-punch upgrade | Implemented in code | Fires synthetic button presses. Not rate-limited. |
-| Treasure uncovering and pickup, detector radar | Implemented in code | No buy button or map UI is created by the builder. |
-
----
+| Voxel grid, chunking, face-culled meshes with flat normals and UVs | Implemented in code; grid Logic tested outside Unity | 96 × 32 × 96 cubes (D13). |
+| 6 bands + 3 treasure seams, values from the spreadsheet | Logic tested outside Unity | Directional layout per the design map. |
+| Upgrade tables, costs and effects | Logic tested outside Unity | Generated from the spreadsheet; all 7 × 10 checked. |
+| Normal and charged punch with explicit patterns | Logic tested outside Unity | 5…97 cubes; charge +2 levels / ×2 damage max. |
+| Punch rate limit, vacuum rate limit, crusher rate | Logic tested outside Unity | Matches the pacing model. |
+| Grid-ray aiming, aim assist, wireframe preview | Logic tested outside Unity (ray); preview Implemented in code | No per-frame wall physics. |
+| Rubble pool, sweep, tank with in-flight reservations | Logic tested outside Unity | |
+| Vacuum suction and blow-out | Implemented in code | |
+| Crusher 07 and conveyor | Implemented in code | |
+| Dynamite (place, 3 s fuse, blast, treasure destroyed) | Implemented in code | Blast uses the grid. |
+| Headlamp (3 levels, flicker) | Implemented in code | |
+| Restored equipment via parts and the store | Logic tested outside Unity | |
+| Company Store UI (7 cards, supplies, repairs) | Implemented in code | |
+| Play HUD, Map, Pause, Ad offer, Settings, text, gate-code and ending screens | Implemented in code | Built by the scene builder. |
+| Escape chain and ending | Logic tested outside Unity; objects Present as a prototype | |
+| Story text (3 logbooks, 10 notes, Dispatch captions) | Done (original) | `story.json`. |
+| Dispatch tutorial | Logic tested outside Unity | |
+| Save / load v2 with migration | Logic tested outside Unity | |
+| Device tiers, URP settings, thermal guard | Logic tested outside Unity (policy); URP calls Implemented in code | |
+| Rewarded ads and Remove Ads rules | Logic tested outside Unity | SDK adapters Not tested or unverified. |
+| Effects, camera shake, FOV kick, walking bob | Implemented in code | Built in code, no assets. |
+| Audio and haptics | Implemented in code | No clips exist yet. |
+| Procedural mine ("New Shift") behind a flag | Logic tested outside Unity | Default off. |
+| Analytics events | Implemented in code | Logged in development builds only. |
 
 ## 7. Features Partially Implemented
 
-| Feature | Status | What is missing or wrong |
+| Feature | Status | What is missing |
 |---|---|---|
-| Normal punch | **Broken or incomplete** | Passes "1" as the cube count, so a normal punch breaks **1 cube** (P0-5). |
-| Charged punch | **Broken or incomplete** | Passes 2 or 3, producing about 4–6 cubes at most. |
-| Punch Pattern upgrade (5→97 cubes) | **Broken or incomplete** | Changes only the preview radius. Even once wired, levels 5, 7, 9 and 10 would give fewer cubes than the table says (P2-1). |
-| Rock Drill (3-deep tunnel) | **Broken or incomplete** | Depth loop is effectively dead, and no code unlocks the drill (P1-7). |
-| Restored equipment (Pneumatic Hammer, Rock Drill, Conveyor) | **Broken or incomplete** | The flags are never set. Work Gauntlets are auto-granted at Punch Power level 3 instead of being a story unlock. |
-| Company Store UI | **Partially implemented** | Buttons exist for only 4 of 7 upgrade lines (Power, Pattern, Tank, Crusher). Speed, Suction and Ore Sense have code but no buttons. Prices are not displayed. |
-| Five wireframe screens | **Partially implemented** | The manager class and references exist. The builder creates only the HUD and the Store panel. No Map, Pause or Ad-offer panels are created, and the manager is never added to the scene. |
-| Left-handed mode | **Partially implemented** | Mirrors rectangles only if they are assigned (they are not). The right-thumb look zone is not mirrored. |
-| Dispatch tutorial (5 steps) | **Broken or incomplete** | Does not compile (P0-1); the manager is not in the scene. |
-| Save / load | **Broken or incomplete** | See P1-3. |
-| Lift escape (power + cable + code) | **Broken or incomplete** | Logic is written, but does not compile, and nothing ever calls the repair/recover/logbook functions (P1-5). |
-| Map and room discovery | **Present as a prototype** | Room bounds use old coordinates (P0-4). No map UI is built. |
-| Audio and haptics | **Partially implemented** | Code exists. **No audio clips are assigned or included.** Haptics use native Android calls; untested. |
-| Device tier scaler | **Partially implemented** | Wrong cap values; some settings have no effect in URP (P1-10). |
-| Monetization | **Present as a prototype** | Placeholders only, with unsafe fallbacks (P1-6). |
-| Headlamp | **Present as a prototype** | A toggled spotlight. The design called for a lantern or headlamp with levels. |
-| One-click scene builder | **Broken or incomplete** | Compile errors; wrong coordinates; nothing saved (P0-1, P0-4). |
-| Procedural prison generation | **Designed but not implemented** | Hand-built only; no seed. |
-| Prisoner rooms, notes, story text | **Designed but not implemented** | Rooms are empty boxes carved in rock; no logbook text exists. |
-| Particles, camera shake, FOV kick, walking bob | **Designed but not implemented** | No `ParticleSystem` anywhere; no FOV or camera-bob code. |
-| Analytics and crash reporting | **Designed but not implemented** | — |
-| Ads SDK and Play Billing | **Designed but not implemented** | Only placeholder hooks. |
-
----
+| Everything | **Not tested or unverified** | A Unity compile, a play-through and phone tests. |
+| Visual assets | Present as a prototype | Primitives only; see `docs/ASSET_REQUIREMENTS.md`. |
+| Sound | Designed but not implemented (assets) | No clip files; code is ready. |
+| Voxel shader | Implemented in code, never compiled | Falls back to an unlit URP shader if it fails. |
+| Ads SDK, consent, Play Billing, purchase verification | Partially implemented | Adapters behind defines; receipt verification marked `TODO(P1-6)`. |
+| Analytics and crash provider | Partially implemented | Interfaces and events only. |
+| URP quality levels | Partially implemented | Levels must be created by hand; editor tool assigns the assets. |
+| Main menu | Designed but not implemented | Quit to Menu saves and closes the app (D32). |
+| Performance tuning | Designed but not implemented | Needs phones. |
 
 ## 8. Important Code Problems and Technical Risks
 
@@ -295,9 +353,9 @@ The reference footage (a commercially released first-person wall-punching game) 
 | "Five UI screens incl. left-handed mode" | **Partially true** | Manager code only; panels not built. |
 | "World size 96 × 32 × 96" | Confirmed | — |
 
-### 8.2 Contradictions between Gemini Argon's documents and the actual code
+### 8.2 Contradictions between the first-draft hand-off documents and the actual code
 
-| Gemini's claim **[G]** | Actual finding **[V]** |
+| Supplier's claim **[G]** | Actual finding **[V]** |
 |---|---|
 | "Core C# Gameplay Codebase (100% Complete)" | Never compiled; compile errors exist; many systems unreachable |
 | `economy_config.json` allows "runtime JSON overrides without recompiling" | No script reads it |
@@ -495,9 +553,9 @@ Landscape only; IL2CPP; ARM64 only; Android App Bundle; minimum Android 8 (API 2
 
 ### Animation and tool-viewmodel review (as requested)
 
-**Documents reviewed:** `animation.txt` (another assistant's answer), `argon.txt`, `argon2.txt`, and the tool-controller code.
+**Documents reviewed:** hand-off note C (a separate review note), hand-off notes A and B, and the tool-controller code.
 
-**Decision recorded:** rigid arm, vacuum and dynamite movement is driven by code. AI tools are used only for static models, which need decimation (suggested about 3–5k triangles for arms, under 2k for small props) and a blocky low-poly look. `animation.txt` suggested skeletal animation for the arms; that advice was **not adopted**.
+**Decision recorded:** rigid arm, vacuum and dynamite movement is driven by code. External modelling tools are used only for static models, which need decimation (suggested about 3–5k triangles for arms, under 2k for small props) and a blocky low-poly look. Hand-off note C suggested skeletal animation for the arms; that advice was **not adopted**.
 
 | Animation | Logic that exists **[V]** | Missing or unverified |
 |---|---|---|
@@ -512,7 +570,7 @@ Landscape only; IL2CPP; ARM64 only; Android App Bundle; minimum Android 8 (API 2
 
 All of this is **Not tested or unverified.**
 
-**Godot:** the only mention of Godot in the materials is a question in `argon.txt` asking which engine (Unity, Unreal or Godot) is being used. **No Godot GDScript animation-preview experiment exists in the provided files, and the project has not been migrated to Godot.** The production codebase is Unity C#.
+**Godot:** the only mention of Godot in the materials is a question in hand-off note A asking which engine (Unity, Unreal or Godot) is being used. **No Godot GDScript animation-preview experiment exists in the provided files, and the project has not been migrated to Godot.** The production codebase is Unity C#.
 
 ---
 
@@ -647,8 +705,8 @@ Keep a "known problems" list; it must be cleared before each gate.
 
 ### 16.1 Status in four answers
 
-1. **What have we actually completed?** The design package, the economy model and a first-draft code scaffold of about 4,300 lines. Nothing has been compiled, built or tested.
-2. **What problems exist in Gemini Argon's code?** Compile-breaking strings, a scene builder that spawns the player in rock, a punch that breaks one cube, unreachable story and equipment, unsafe monetization fallbacks, unrestored save data, and an economy model the code does not enforce (sections 8 and 10).
+1. **What have we actually completed?** The design package, the economy model, and (4 November) a reworked codebase that addresses every listed issue, with 75 passing pure-logic tests and a clean type-check against Unity API stand-ins. Nothing has been compiled in Unity, built or tested on a phone.
+2. **What problems existed in the first-draft code?** Compile-breaking strings, a scene builder that spawns the player in rock, a punch that breaks one cube, unreachable story and equipment, unsafe monetization fallbacks, unrestored save data, and an economy model the code does not enforce (sections 8 and 10).
 3. **What exactly needs to be fixed?** The P0 items first (section 13, rows 1–5), then P1.
 4. **What remains before release?** Milestones 0–9, then Google Play closed testing and review.
 
@@ -657,7 +715,7 @@ Keep a "known problems" list; it must be cleared before each gate.
 - The original concept text was noted to be **very close to an existing game's store description**. Rewrite it in your own words.
 - Develop original: game identity, art direction, UI design, prison/mine layout, narrative and characters, story text, visual effects, audio, and the store listing and marketing.
 - The reference footage was used to understand mechanics and pacing only. **Do not use another game's protected assets, branding, text, models, textures, sounds or distinctive presentation.**
-- Gemini's code was written to mimic reference-clip behaviour (for example timestamps and "exact" movements). Behaviour inspiration is acceptable; keep all art, text and audio your own, and keep a **licence log** for every asset.
+- The first-draft code was written to mimic reference-clip behaviour (for example timestamps and "exact" movements). Behaviour inspiration is acceptable; keep all art, text and audio your own, and keep a **licence log** for every asset.
 - Keep the Greywater Deep setting, the Company Store, the crew logbooks and the hazard-stripe UI as the distinguishing identity.
 
 ### 16.3 Immediate next steps
@@ -673,3 +731,18 @@ Keep a "known problems" list; it must be cleared before each gate.
 
 - File location: `docs/Break_to_Escape_Development_Status_Report.md`, linked from the root README.
 - Suggested repository hygiene: a Unity `.gitignore`, and Git LFS only if large binary assets are added.
+
+
+---
+
+## 17. Change Log
+
+| Date | Commit group | Issues |
+|---|---|---|
+| 4 Nov 2026 | Type-check harness with Unity API stubs, licence log | P0-2 |
+| 4 Nov 2026 | Unity-independent core (economy, patterns, grid, ray traversal, rubble pool, tank, limiters, save, story, tiers, services rules), `economy.json` generated from the spreadsheet, NUnit tests | P0-5, P1-1, P1-2, P1-3, P1-4, P2-3 |
+| 4 Nov 2026 | Runtime scripts ported onto the core: input abstraction, aim, punch, dynamite, headlamp, viewmodel animator, rubble, crusher, economy, story chain, treasure and map, UI, save, audio, services, tiers, effects, bootstrap; procedural generator | P0-3, P0-5, P1-1, P1-2, P1-4, P1-5, P1-6, P1-7, P1-10, P2-4, P2-5, P2-7, P2-8, P2-10, P2-11, P2-13, P3-1, P3-2, P3-5 |
+| 4 Nov 2026 | Scene builder rebuilt (assets, all screens, wiring, scene save), URP shaders, URP tier tool | P0-1, P0-4, P1-8, P1-9, P1-10, P1-11, P2-6 |
+| 4 Nov 2026 | Pacing check script, harness README | P1-4, P2-4 |
+| 4 Nov 2026 | Review fixes (UI hit test, rubble batching, refunds, null guards), decisions, asset requirements, Android checklist, setup guide | P1-6, P1-12, P1-13, P2-6, P2-14, P2-15, P3-6 |
+| 4 Nov 2026 | Progress log, status report and README updated | P3-7 |
