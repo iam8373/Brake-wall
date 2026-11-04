@@ -1,0 +1,171 @@
+{
+  "voxelSize": 0.5,
+  "rubbleSweepRefundRatio": 0.6,
+  "adFreeGracePeriodSeconds": 300.0,
+  "doubleCashDurationSeconds": 300.0,
+  "doubleCashCooldownSeconds": 600.0,
+  "upgrades": {
+    "punchPower": {
+      "baseCost": 150,
+      "costGrowth": 2.2,
+      "values": [
+        10.0,
+        14.5,
+        21.025,
+        30.48625,
+        44.205062,
+        64.097341,
+        92.941144,
+        134.764659,
+        195.408755,
+        283.342695
+      ]
+    },
+    "punchSpeed": {
+      "baseCost": 200,
+      "costGrowth": 2.2,
+      "values": [
+        1.5,
+        1.75,
+        2.0,
+        2.25,
+        2.5,
+        2.75,
+        3.0,
+        3.25,
+        3.5,
+        3.75
+      ]
+    },
+    "punchPattern": {
+      "baseCost": 250,
+      "costGrowth": 2.2,
+      "values": [
+        5,
+        9,
+        13,
+        21,
+        29,
+        37,
+        49,
+        61,
+        77,
+        97
+      ]
+    },
+    "vacuumSuction": {
+      "baseCost": 175,
+      "costGrowth": 2.2,
+      "values": [
+        6.0,
+        7.8,
+        10.14,
+        13.182,
+        17.1366,
+        22.27758,
+        28.960854,
+        37.64911,
+        48.943843,
+        63.626996
+      ]
+    },
+    "tankCapacity": {
+      "baseCost": 125,
+      "costGrowth": 2.2,
+      "values": [
+        60,
+        90,
+        130,
+        190,
+        270,
+        380,
+        530,
+        740,
+        1030,
+        1450
+      ]
+    },
+    "crusherSpeed": {
+      "baseCost": 225,
+      "costGrowth": 2.2,
+      "values": [
+        8.0,
+        10.4,
+        13.52,
+        17.576,
+        22.8488,
+        29.70344,
+        38.614472,
+        50.198814,
+        65.258458,
+        84.835995
+      ]
+    },
+    "oreSense": {
+      "baseCost": 375,
+      "costGrowth": 2.2,
+      "values": [
+        1.0,
+        1.08,
+        1.16,
+        1.24,
+        1.32,
+        1.4,
+        1.48,
+        1.56,
+        1.64,
+        1.72
+      ]
+    }
+  },
+  "bands": [
+    {
+      "id": 1,
+      "name": "Concrete lining",
+      "hp": 10.0,
+      "value": 2.0,
+      "cubesOnPath": 850,
+      "colorHex": "#ADB3B8"
+    },
+    {
+      "id": 2,
+      "name": "Packed earth & timber",
+      "hp": 25.0,
+      "value": 3.5,
+      "cubesOnPath": 1500,
+      "colorHex": "#7A5230"
+    },
+    {
+      "id": 3,
+      "name": "Sandstone gallery",
+      "hp": 60.0,
+      "value": 6.0,
+      "cubesOnPath": 2300,
+      "colorHex": "#D19952"
+    },
+    {
+      "id": 4,
+      "name": "Granite core",
+      "hp": 140.0,
+      "value": 10.0,
+      "cubesOnPath": 3500,
+      "colorHex": "#6B6670"
+    },
+    {
+      "id": 5,
+      "name": "Ore veins",
+      "hp": 260.0,
+      "value": 30.0,
+      "cubesOnPath": 5000,
+      "colorHex": "#B86B35"
+    },
+    {
+      "id": 6,
+      "name": "Crystal vault",
+      "hp": 420.0,
+      "value": 70.0,
+      "cubesOnPath": 7000,
+      "colorHex": "#4FD6E8"
+    }
+  ]
+}
